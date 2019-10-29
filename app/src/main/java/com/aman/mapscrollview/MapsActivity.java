@@ -1,7 +1,7 @@
 package com.aman.mapscrollview;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,15 +16,36 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Maps activity.
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    /**
+     * The List.
+     */
     List<Location> list = new ArrayList<>();
+    /**
+     * The View pager.
+     */
     ViewPager viewPager;
-    List<Marker> markerList= new ArrayList<>();
+    /**
+     * The Marker list.
+     */
+    List<Marker> markerList = new ArrayList<>();
+    /**
+     * The View pager adapter.
+     */
     ViewPagerAdapter viewPagerAdapter;
-    int oldPosition=0;
+    /**
+     * The Old position.
+     */
+    int oldPosition = 0;
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +58,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         viewPager.setPageMargin(15);
     }
 
+    /**
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        list=getLocationList();
+        list = getLocationList();
         initMarkers();
-        viewPagerAdapter= new ViewPagerAdapter(getSupportFragmentManager(),list);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -64,15 +88,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * @param position
+     */
     private void updateView(int position) {
         markerList.get(position).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_selected));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(list.get(position).getLatLng(), 15));
 
 
         markerList.get(oldPosition).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_unselected));
-        oldPosition=position;
+        oldPosition = position;
     }
 
+    /**
+     * init markers
+     */
     private void initMarkers() {
 
         for (int i = 0; i < list.size(); i++) {
@@ -89,6 +119,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * @return location list
+     */
     private List<Location> getLocationList() {
         List<Location> list = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -98,6 +131,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return list;
     }
 
+    /**
+     * @return random coordinates
+     */
     private double getCoordinate() {
         return 21 + (Math.random() * (77 - 21));
     }
